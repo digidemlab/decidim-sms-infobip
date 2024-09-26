@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe Decidim::Sms::Telia::DeliveriesController, type: :controller do
+describe Decidim::Sms::Telia::DeliveriesController do
   routes { Decidim::Sms::Telia::Engine.routes }
 
   let!(:organization) { create(:organization) }

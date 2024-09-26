@@ -38,7 +38,7 @@ module Decidim
         end
 
         scope :valid, -> { where("expires_at > ?", Time.zone.now) }
-        scope :expired, -> { where("expires_at <= ?", Time.zone.now) }
+        scope :expired, -> { where(expires_at: ..Time.zone.now) }
 
         def authorization_header
           "Bearer #{access_token}"

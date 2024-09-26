@@ -41,7 +41,7 @@ shared_context "with Telia Messaging endpoint" do
           {
             status: 403,
             body: body.to_json,
-            headers: headers
+            headers:
           }
         else
           body = {

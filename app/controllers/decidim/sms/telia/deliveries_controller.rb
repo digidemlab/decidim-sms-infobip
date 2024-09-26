@@ -18,7 +18,7 @@ module Decidim
 
           delivery.update!(status: delivery_info["deliveryStatus"].underscore) if delivery_info["deliveryStatus"].present?
 
-          render body: nil, status: :no_content, content_type: "application/json"
+          head :no_content
         end
 
         private

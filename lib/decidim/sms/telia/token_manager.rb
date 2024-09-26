@@ -27,7 +27,7 @@ module Decidim
         end
 
         def request
-          response = Http.new(uri_for("token"), authorization: authorization_header, debug: debug).post do |req|
+          response = Http.new(uri_for("token"), authorization: authorization_header, debug:).post do |req|
             req.set_form_data("grant_type" => "client_credentials")
           end
           return if response.code != "200"
@@ -36,7 +36,7 @@ module Decidim
         end
 
         def revoke(token)
-          response = Http.new(uri_for("revoke"), authorization: authorization_header, debug: debug).post do |req|
+          response = Http.new(uri_for("revoke"), authorization: authorization_header, debug:).post do |req|
             req.set_form_data("token" => token.access_token)
           end
           token.destroy

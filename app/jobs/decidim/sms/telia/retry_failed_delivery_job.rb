@@ -7,7 +7,7 @@ module Decidim
         queue_as :default
 
         def perform(*params, queued: false)
-          Gateway.new(params, queued: queued).deliver_code
+          Gateway.new(params, queued:).deliver_code
         end
       end
     end

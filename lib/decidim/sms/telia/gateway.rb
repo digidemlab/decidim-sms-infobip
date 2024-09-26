@@ -70,8 +70,8 @@ module Decidim
             resource_url = response.dig("resourceReference", "resourceURL")
 
             delivery.update!(
-              resource_url: resource_url,
-              status: status
+              resource_url:,
+              status:
             )
           end
 
@@ -97,7 +97,7 @@ module Decidim
             raise TeliaAuthenticationError
           end
 
-          response = Http.new(outbound_uri, authorization: token.authorization_header, debug: debug).post(
+          response = Http.new(outbound_uri, authorization: token.authorization_header, debug:).post(
             request_body(delivery),
             "Accept" => "application/json",
             "Content-Type" => "application/json"
@@ -118,7 +118,7 @@ module Decidim
         end
 
         def token_manager
-          @token_manager ||= TokenManager.new(debug: debug)
+          @token_manager ||= TokenManager.new(debug:)
         end
 
         def request_body(delivery)
@@ -212,7 +212,7 @@ module Decidim
             .perform_later(
               remove_prefix(phone_number),
               code,
-              organization: organization,
+              organization:,
               queued: true
             )
         end

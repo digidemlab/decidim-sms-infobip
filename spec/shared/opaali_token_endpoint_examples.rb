@@ -34,7 +34,7 @@ shared_context "with Telia SMS token endpoint" do
         }.to_json
 
         {
-          body: body,
+          body:,
           headers: auth_endpoint_headers.merge(
             "Date" => Time.now.httpdate,
             "Cache-Control" => "no-store",
@@ -71,7 +71,7 @@ shared_context "with Telia SMS token endpoint" do
 
         {
           status: 400,
-          body: body,
+          body:,
           headers: auth_endpoint_headers.merge(
             "Date" => Time.now.httpdate,
             "Content-Length" => body.length

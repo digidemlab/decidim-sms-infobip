@@ -9,7 +9,7 @@ describe Decidim::Sms::Telia::Gateway do
   let(:organization) { create(:organization) }
 
   shared_examples "working messaging API" do
-    let(:gateway) { described_class.new(phone_number, message, organization: organization) }
+    let(:gateway) { described_class.new(phone_number, message, organization:) }
     let(:phone_number) { "+358401234567" }
     let(:message) { "Testing message" }
 

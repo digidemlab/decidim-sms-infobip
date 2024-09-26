@@ -10,7 +10,7 @@ module Decidim
         def generate_callback_data
           loop do
             self.callback_data = generate_digest
-            break if ::Decidim::Sms::Telia::Delivery.find_by(callback_data: callback_data).blank?
+            break if ::Decidim::Sms::Telia::Delivery.find_by(callback_data:).blank?
           end
         end
 
