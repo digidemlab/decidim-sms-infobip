@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "infobip/sms"
+
 require "decidim/sms/telia/engine"
 
 module Decidim

@@ -15,6 +15,8 @@ DECIDIM_VERSION = Decidim::Sms::Telia.decidim_version
 gem "decidim", DECIDIM_VERSION
 gem "decidim-sms-telia", path: "."
 
+gem "infobip-sms", "~> 0.1.3"
+
 gem "bootsnap", "~> 1.4"
 
 gem "puma", ">= 5.6.2"
@@ -33,7 +35,7 @@ group :development, :test do
   # must be a boolean instead of contextual. These version locks can be removed when this problem is handled
   # through decidim-dev.
   gem "rubocop", "~>1.28"
-  gem "rubocop-rspec", "2.20"
+  gem "rubocop-rspec", "~>3.0"
 
   gem "rubocop-faker"
 end
@@ -41,7 +43,7 @@ end
 group :development do
   gem "letter_opener_web", "~> 2.0"
   gem "listen", "~> 3.1"
-  gem "spring", "~> 2.0"
+  gem "spring", "~> 4.0"
   gem "spring-watcher-listen", "~> 2.0"
   gem "web-console", "~> 4.2"
 end

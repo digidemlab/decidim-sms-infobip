@@ -53,11 +53,11 @@ module Decidim
         attr_reader :phone_number, :code, :organization, :sender_address, :sender_name
 
         def initialize(phone_number, code, organization: nil, queued: false, debug: false)
-          @phone_number = "tel:#{phone_number}"
+          @phone_number = phone_number
           @code = code
           @organization ||= organization
-          @sender_address ||= "tel:#{secrets[:sender_address]}"
-          @sender_name ||= secrets[:sender_name]
+          @sender_address ||= ::Infobip::Sms::Request.configuration.sms_identifier
+          @sender_name ||= nil #secrets[:sender_name]
           @queued = queued
           @debug = debug
         end
@@ -91,26 +91,11 @@ module Decidim
         end
 
         def create_message!(delivery)
-          token = token_manager.fetch
-          unless token
-            Rails.logger.error "Telia error -- Invalid username or password"
-            raise TeliaAuthenticationError
-          end
-
-          response = Http.new(outbound_uri, authorization: token.authorization_header, debug:).post(
-            request_body(delivery),
-            "Accept" => "application/json",
-            "Content-Type" => "application/json"
+          response = ::Infobip::Sms::Connection.new.send_single_sms(
+            phone_number_with_prefix: phone_number,
+            content: "Din inloggningskod till Medborgarinflytande Göteborg Stad är #{code}"
           )
-
-          if %w(200 201 202).include?(response.code)
-            [parse_json(response.body), "sent"]
-          else
-            handle_policy_exception(response)
-          end
-        rescue JSON::ParserError => e
-          log_server_error("Json parse error from server", e.message, response.code)
-          raise TeliaServerError.new("JSON::ParserError server error from telia", e.message)
+          [response, "sent"]
         end
 
         def parse_json(response)
@@ -141,7 +126,7 @@ module Decidim
         end
 
         def outbound_uri
-          "https://api.opaali.telia.fi/#{mode}/messaging/v1/outbound/#{CGI.escape(sender_address)}/requests"
+          "https://6944qe.api.infobip.com/sms/3/messages"
         end
 
         def mode
@@ -156,8 +141,8 @@ module Decidim
 
         def track_delivery
           yield Delivery.create(
-            from: remove_prefix(sender_address),
-            to: remove_prefix(phone_number),
+            from: sender_address,
+            to: phone_number,
             status: "initiated"
           )
         end
@@ -210,7 +195,7 @@ module Decidim
           RetryFailedDeliveryJob
             .set(wait: sms_retry_delay.seconds)
             .perform_later(
-              remove_prefix(phone_number),
+              phone_number,
               code,
               organization:,
               queued: true

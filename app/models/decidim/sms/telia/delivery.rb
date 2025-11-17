@@ -17,7 +17,7 @@ module Decidim
         private
 
         def generate_digest
-          characters = ("0".."9").to_a + ("A".."Z").to_a + ("a".."a").to_a
+          characters = ("0".."9").to_a + ("A".."Z").to_a + ("a".."z").to_a
           characters.sample(32).join
         end
       end
