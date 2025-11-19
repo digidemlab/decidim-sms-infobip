@@ -2,7 +2,7 @@
 
 module Decidim
   module Sms
-    module Telia
+    module Infobip
       class TokenManager
         def initialize(debug: false)
           @debug = debug
@@ -55,7 +55,7 @@ module Decidim
         attr_reader :debug
 
         def uri_for(action)
-          "https://api.opaali.telia.fi/autho4api/v1/#{action}"
+          "https://api.opaali.infobip.fi/autho4api/v1/#{action}"
         end
 
         def authorization_header
@@ -64,8 +64,8 @@ module Decidim
 
         def credentials
           [
-            Rails.application.secrets.telia[:username],
-            Rails.application.secrets.telia[:password]
+            Rails.application.secrets.infobip[:username],
+            Rails.application.secrets.infobip[:password]
           ]
         end
       end

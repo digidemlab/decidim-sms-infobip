@@ -2,7 +2,7 @@
 
 module Decidim
   module Sms
-    module Telia
+    module Infobip
       class RetryFailedDeliveryJob < ApplicationJob
         queue_as :default
 

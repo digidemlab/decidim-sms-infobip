@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateDecidimSmsTeliaDeliveries < ActiveRecord::Migration[6.1]
+class CreateDecidimSmsInfobipDeliveries < ActiveRecord::Migration[6.1]
   def change
-    create_table :decidim_sms_telia_deliveries do |t|
+    create_table :decidim_sms_infobip_deliveries do |t|
       t.string :from
       t.string :to
       t.string :status

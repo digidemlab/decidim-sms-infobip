@@ -2,7 +2,7 @@
 
 module Decidim
   module Sms
-    module Telia
+    module Infobip
       class Http
         def initialize(uri, authorization:, debug: false)
           @uri = URI.parse(uri)

@@ -2,9 +2,9 @@
 
 require "spec_helper"
 
-describe Decidim::Sms::Telia::Gateway do
-  include_context "with Telia SMS token endpoint"
-  include_context "with Telia Messaging endpoint"
+describe Decidim::Sms::Infobip::Gateway do
+  include_context "with Infobip SMS token endpoint"
+  include_context "with Infobip Messaging endpoint"
 
   let(:organization) { create(:organization) }
 
@@ -19,11 +19,11 @@ describe Decidim::Sms::Telia::Gateway do
       it { is_expected.to be(true) }
 
       it "creates a new delivery" do
-        expect { subject }.to change(Decidim::Sms::Telia::Delivery, :count).by(1)
+        expect { subject }.to change(Decidim::Sms::Infobip::Delivery, :count).by(1)
 
-        delivery = Decidim::Sms::Telia::Delivery.last
+        delivery = Decidim::Sms::Infobip::Delivery.last
         expect(delivery.to).to eq(phone_number)
-        expect(delivery.from).to eq(Rails.application.secrets.telia[:sender_address])
+        expect(delivery.from).to eq(Rails.application.secrets.infobip[:sender_address])
         expect(delivery.status).to eq("sent")
         expect(delivery.resource_url).to eq(resource_url)
         expect(delivery.callback_data).to match(/[a-zA-Z0-9]{32}/)
@@ -32,16 +32,16 @@ describe Decidim::Sms::Telia::Gateway do
       context "with incorrect credentials" do
         let(:auth_token_credentials) { %w(foo bar) }
 
-        it "raises a TeliaAuthenticationError" do
-          expect { subject }.to raise_error(Decidim::Sms::Telia::TeliaAuthenticationError)
+        it "raises a InfobipAuthenticationError" do
+          expect { subject }.to raise_error(Decidim::Sms::Infobip::InfobipAuthenticationError)
         end
       end
 
       context "with invalid authorization token" do
         let(:authorization_token) { "foobar" }
 
-        it "raises a TeliaServerError" do
-          expect { subject }.to raise_error(Decidim::Sms::Telia::TeliaServerError)
+        it "raises a InfobipServerError" do
+          expect { subject }.to raise_error(Decidim::Sms::Infobip::InfobipServerError)
         end
       end
 
@@ -56,12 +56,12 @@ describe Decidim::Sms::Telia::Gateway do
             let(:messaging_api_policy_exception) { code }
             let(:gateway_error) { error }
 
-            it "throws a TeliaPolicyError" do
-              expect { subject }.to raise_error(Decidim::Sms::Telia::TeliaPolicyError)
+            it "throws a InfobipPolicyError" do
+              expect { subject }.to raise_error(Decidim::Sms::Infobip::InfobipPolicyError)
 
               begin
                 subject
-              rescue Decidim::Sms::Telia::TeliaPolicyError => e
+              rescue Decidim::Sms::Infobip::InfobipPolicyError => e
                 expect(e.error_code).to be(gateway_error)
               end
             end
@@ -71,12 +71,12 @@ describe Decidim::Sms::Telia::Gateway do
         context "when unknown" do
           let(:messaging_api_policy_exception) { "POL9999" }
 
-          it "throws a TeliaPolicyError" do
-            expect { subject }.to raise_error(Decidim::Sms::Telia::TeliaPolicyError)
+          it "throws a InfobipPolicyError" do
+            expect { subject }.to raise_error(Decidim::Sms::Infobip::InfobipPolicyError)
 
             begin
               subject
-            rescue Decidim::Sms::Telia::TeliaPolicyError => e
+            rescue Decidim::Sms::Infobip::InfobipPolicyError => e
               expect(e.error_code).to be(:unknown)
             end
           end
@@ -94,9 +94,9 @@ describe Decidim::Sms::Telia::Gateway do
 
     context "when the mode is unknown" do
       before do
-        telia_secrets = Rails.application.secrets.telia
-        allow(Rails.application.secrets).to receive(:telia).and_return(
-          telia_secrets.merge(mode: "foobar")
+        infobip_secrets = Rails.application.secrets.infobip
+        allow(Rails.application.secrets).to receive(:infobip).and_return(
+          infobip_secrets.merge(mode: "foobar")
         )
       end
 
@@ -117,9 +117,9 @@ describe Decidim::Sms::Telia::Gateway do
 
     context "when set through the secrrets" do
       before do
-        telia_secrets = Rails.application.secrets.telia
-        allow(Rails.application.secrets).to receive(:telia).and_return(
-          telia_secrets.merge(mode: api_mode)
+        infobip_secrets = Rails.application.secrets.infobip
+        allow(Rails.application.secrets).to receive(:infobip).and_return(
+          infobip_secrets.merge(mode: api_mode)
         )
       end
 

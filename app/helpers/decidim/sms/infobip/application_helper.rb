@@ -2,8 +2,8 @@
 
 module Decidim
   module Sms
-    module Telia
-      # Custom helpers, scoped to the sms-telia engine.
+    module Infobip
+      # Custom helpers, scoped to the sms-infobip engine.
       #
       module ApplicationHelper
       end

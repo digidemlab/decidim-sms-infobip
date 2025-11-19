@@ -2,7 +2,7 @@
 
 module Decidim
   module Sms
-    module Telia
+    module Infobip
       # Abstract class from which all models in this engine inherit.
       class ApplicationRecord < ActiveRecord::Base
         self.abstract_class = true

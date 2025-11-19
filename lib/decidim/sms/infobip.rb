@@ -2,15 +2,15 @@
 
 require "infobip/sms"
 
-require "decidim/sms/telia/engine"
+require "decidim/sms/infobip/engine"
 
 module Decidim
   module Sms
-    # This namespace holds the logic for Telia SMS integration.
-    module Telia
-      autoload :Gateway, "decidim/sms/telia/gateway"
-      autoload :Http, "decidim/sms/telia/http"
-      autoload :TokenManager, "decidim/sms/telia/token_manager"
+    # This namespace holds the logic for Infobip SMS integration.
+    module Infobip
+      autoload :Gateway, "decidim/sms/infobip/gateway"
+      autoload :Http, "decidim/sms/infobip/http"
+      autoload :TokenManager, "decidim/sms/infobip/token_manager"
 
       include ActiveSupport::Configurable
 

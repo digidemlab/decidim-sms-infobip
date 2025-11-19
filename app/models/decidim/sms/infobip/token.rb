@@ -2,12 +2,12 @@
 
 module Decidim
   module Sms
-    module Telia
+    module Infobip
       # The data store for a API tokens. Note that only one token is valid at
       # a time for given credentials, so these cannot be scoped e.g. to
       # organization. With the same credentials, only one token can be utilized
       # at a time.
-      class Token < Telia::ApplicationRecord
+      class Token < Infobip::ApplicationRecord
         def self.from(data)
           if data.is_a?(Net::HTTPResponse)
             token_data = JSON.parse(data.body)
@@ -20,7 +20,7 @@ module Decidim
 
               # Note that the tokens are valid longer currently and the API
               # response contains the "expires_in" information but it has been
-              # suggested by Telia that one token is only used for a maximum of
+              # suggested by Infobip that one token is only used for a maximum of
               # 9 minutes at a time which is why we override this value.
               # expires_in = data["expires_in"]
               expires_in = 540

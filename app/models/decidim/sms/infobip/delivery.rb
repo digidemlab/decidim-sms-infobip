@@ -2,15 +2,15 @@
 
 module Decidim
   module Sms
-    module Telia
+    module Infobip
       # The data store for a Delivery status of messages being sent to the users
-      class Delivery < Telia::ApplicationRecord
+      class Delivery < Infobip::ApplicationRecord
         before_create :generate_callback_data
 
         def generate_callback_data
           loop do
             self.callback_data = generate_digest
-            break if ::Decidim::Sms::Telia::Delivery.find_by(callback_data:).blank?
+            break if ::Decidim::Sms::Infobip::Delivery.find_by(callback_data:).blank?
           end
         end
 

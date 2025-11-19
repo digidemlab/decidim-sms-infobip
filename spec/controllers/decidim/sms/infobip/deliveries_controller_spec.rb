@@ -2,11 +2,11 @@
 
 require "spec_helper"
 
-describe Decidim::Sms::Telia::DeliveriesController do
-  routes { Decidim::Sms::Telia::Engine.routes }
+describe Decidim::Sms::Infobip::DeliveriesController do
+  routes { Decidim::Sms::Infobip::Engine.routes }
 
   let!(:organization) { create(:organization) }
-  let!(:delivery) { create(:telia_sms_delivery, :sent) }
+  let!(:delivery) { create(:infobip_sms_delivery, :sent) }
 
   before do
     request.env["decidim.current_organization"] = organization
@@ -68,7 +68,7 @@ describe Decidim::Sms::Telia::DeliveriesController do
               <address>tel:#{delivery.to}</address>
               <deliveryStatus>#{notification_status}</deliveryStatus>
             </deliveryInfo>
-            <link rel="OutboundMessageRequest" href="https://api.opaali.telia.fi/production/messaging/v1/outbound/tel%3A%2B358000000000/requests/12abcdef-abcd-abcd-abcd-123456abcdef"/>
+            <link rel="OutboundMessageRequest" href="https://api.opaali.infobip.fi/production/messaging/v1/outbound/tel%3A%2B358000000000/requests/12abcdef-abcd-abcd-abcd-123456abcdef"/>
           </msg:deliveryInfoNotification>
         XML
       end
@@ -103,7 +103,7 @@ describe Decidim::Sms::Telia::DeliveriesController do
           },
           "link" => {
             "rel" => "OutboundMessageRequest",
-            "href" => "https://api.opaali.telia.fi/production/messaging/v1/outbound/tel%3A%2B358000000000/requests/12abcdef-abcd-abcd-abcd-123456abcdef"
+            "href" => "https://api.opaali.infobip.fi/production/messaging/v1/outbound/tel%3A%2B358000000000/requests/12abcdef-abcd-abcd-abcd-123456abcdef"
           }
         }.to_json
       end

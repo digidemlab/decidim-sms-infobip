@@ -8,12 +8,12 @@ ruby RUBY_VERSION
 # the Gemfile is copied to the development_app folder (almost) as is.
 base_path = ""
 base_path = "../" if File.basename(__dir__) == "development_app"
-require_relative "#{base_path}lib/decidim/sms/telia/version"
+require_relative "#{base_path}lib/decidim/sms/infobip/version"
 
-DECIDIM_VERSION = Decidim::Sms::Telia.decidim_version
+DECIDIM_VERSION = Decidim::Sms::Infobip.decidim_version
 
 gem "decidim", DECIDIM_VERSION
-gem "decidim-sms-telia", path: "."
+gem "decidim-sms-infobip", path: "."
 
 gem "infobip-sms", "~> 0.1.3"
 

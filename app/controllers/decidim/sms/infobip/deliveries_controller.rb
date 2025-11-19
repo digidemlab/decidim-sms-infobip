@@ -2,8 +2,8 @@
 
 module Decidim
   module Sms
-    module Telia
-      class DeliveriesController < Decidim::Sms::Telia::ApplicationController
+    module Infobip
+      class DeliveriesController < Decidim::Sms::Infobip::ApplicationController
         # Prevent any before action calling the `params` method which could
         # potentially cause the Rails automagic to try to parse the JSON params
         # from the XML body (because the headers of the request are potentially

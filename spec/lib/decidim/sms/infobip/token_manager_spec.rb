@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe Decidim::Sms::Telia::TokenManager do
-  include_context "with Telia SMS token endpoint"
+describe Decidim::Sms::Infobip::TokenManager do
+  include_context "with Infobip SMS token endpoint"
 
   let(:manager) { described_class.new }
 
   shared_examples "valid token" do
-    it { is_expected.to be_a(Decidim::Sms::Telia::Token) }
+    it { is_expected.to be_a(Decidim::Sms::Infobip::Token) }
 
     it "has the correct token" do
       expect(subject.to_s).to eq("abcdef1234567890")
@@ -33,18 +33,18 @@ describe Decidim::Sms::Telia::TokenManager do
     it_behaves_like "valid token"
 
     context "when the token has been already fetched" do
-      let!(:token) { create(:telia_sms_token) }
+      let!(:token) { create(:infobip_sms_token) }
 
       it "has the correct token" do
         expect(subject.to_s).to eq("abcdef1234567890")
 
-        expect(Decidim::Sms::Telia::Token.count).to eq(1)
+        expect(Decidim::Sms::Infobip::Token.count).to eq(1)
       end
 
       it "does not re-request the token" do
         expect(manager).not_to receive(:request)
-        expect(subject).to be_a(Decidim::Sms::Telia::Token)
-        expect(Decidim::Sms::Telia::Token.count).to eq(1)
+        expect(subject).to be_a(Decidim::Sms::Infobip::Token)
+        expect(Decidim::Sms::Infobip::Token.count).to eq(1)
       end
 
       context "and the existing token has expired" do
@@ -55,7 +55,7 @@ describe Decidim::Sms::Telia::TokenManager do
         it "requests a new token" do
           expect(manager).to receive(:request).and_call_original
           expect(subject.expired?).to be(false)
-          expect(Decidim::Sms::Telia::Token.count).to eq(1)
+          expect(Decidim::Sms::Infobip::Token.count).to eq(1)
         end
 
         context "with incorrect credentials" do
@@ -71,7 +71,7 @@ describe Decidim::Sms::Telia::TokenManager do
     subject { manager.revoke(token) }
 
     let(:token) do
-      Decidim::Sms::Telia::Token.from(
+      Decidim::Sms::Infobip::Token.from(
         "access_token" => "abcdef1234567890",
         "issued_at" => token_issued_at,
         "expires_in" => 9.minutes
@@ -95,7 +95,7 @@ describe Decidim::Sms::Telia::TokenManager do
           # Make sure the correct credentials are stored for the API.
           auth_token_credentials
 
-          allow(Rails.application.secrets).to receive(:telia).and_return(
+          allow(Rails.application.secrets).to receive(:infobip).and_return(
             username: "foo",
             password: "bar"
           )

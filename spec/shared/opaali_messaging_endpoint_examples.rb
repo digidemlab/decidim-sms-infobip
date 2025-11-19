@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-shared_context "with Telia Messaging endpoint" do
-  let(:sender_address) { "tel:#{Rails.application.secrets.telia[:sender_address]}" }
+shared_context "with Infobip Messaging endpoint" do
+  let(:sender_address) { "tel:#{Rails.application.secrets.infobip[:sender_address]}" }
   let(:authorization_token) { "abcdef1234567890" }
-  let(:resource_url) { "https://api.opaali.telia.fi/production/messaging/v1/outbound/#{CGI.escape(sender_address)}/requests/12abcdef-abcd-abcd-abcd-123456abcdef" }
+  let(:resource_url) { "https://api.opaali.infobip.fi/production/messaging/v1/outbound/#{CGI.escape(sender_address)}/requests/12abcdef-abcd-abcd-abcd-123456abcdef" }
 
   let(:messaging_api_response_headers) do
     {
@@ -19,7 +19,7 @@ shared_context "with Telia Messaging endpoint" do
   before do
     stub_request(
       :post,
-      "https://api.opaali.telia.fi/#{api_mode}/messaging/v1/outbound/#{CGI.escape(sender_address)}/requests"
+      "https://api.opaali.infobip.fi/#{api_mode}/messaging/v1/outbound/#{CGI.escape(sender_address)}/requests"
     ).to_return do |request|
       if request.headers["Authorization"] == "Bearer #{authorization_token}"
         headers = messaging_api_response_headers.merge("Date" => Time.now.httpdate)

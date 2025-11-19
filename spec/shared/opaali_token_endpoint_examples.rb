@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_context "with Telia SMS token endpoint" do
+shared_context "with Infobip SMS token endpoint" do
   let(:auth_endpoint_headers) do
     {
       "Content-Type" => "application/json;charset=utf-8",
@@ -14,8 +14,8 @@ shared_context "with Telia SMS token endpoint" do
   let(:auth_token_expiration_time) { token_generation_time + token_expires_in.seconds }
   let(:auth_token_credentials) do
     [
-      Rails.application.secrets.telia[:username],
-      Rails.application.secrets.telia[:password]
+      Rails.application.secrets.infobip[:username],
+      Rails.application.secrets.infobip[:password]
     ]
   end
 
@@ -23,7 +23,7 @@ shared_context "with Telia SMS token endpoint" do
     # Token endpoint
     stub_request(
       :post,
-      "https://api.opaali.telia.fi/autho4api/v1/token"
+      "https://api.opaali.infobip.fi/autho4api/v1/token"
     ).to_return do |request|
       if request.headers["Authorization"] == "Basic #{Base64.encode64(auth_token_credentials.join(":")).strip}"
         auth_token_generation_time
@@ -59,7 +59,7 @@ shared_context "with Telia SMS token endpoint" do
     # Revoke endpoint
     stub_request(
       :post,
-      "https://api.opaali.telia.fi/autho4api/v1/revoke"
+      "https://api.opaali.infobip.fi/autho4api/v1/revoke"
     ).to_return do |request|
       if request.headers["Authorization"] == "Basic #{Base64.encode64(auth_token_credentials.join(":")).strip}"
         {

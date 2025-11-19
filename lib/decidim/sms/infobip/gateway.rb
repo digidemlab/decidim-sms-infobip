@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# A Service to send SMS to Telia provider to make capability of sending sms with Telia gateway
+# A Service to send SMS to Infobip provider to make capability of sending sms with Infobip gateway
 module Decidim
   module Sms
     class GatewayError < StandardError
@@ -12,16 +12,16 @@ module Decidim
       end
     end
 
-    module Telia
-      class TeliaPolicyError < GatewayError
+    module Infobip
+      class InfobipPolicyError < GatewayError
         def initialize(message = "Gateway error", error_code = 0)
-          super(message, telia_error(error_code))
+          super(message, infobip_error(error_code))
         end
 
         private
 
-        def telia_error(telia_code)
-          case telia_code
+        def infobip_error(infobip_code)
+          case infobip_code
           when "POL3003"
             :server_busy
           when "POL3101"
@@ -37,13 +37,13 @@ module Decidim
         end
       end
 
-      class TeliaServerError < GatewayError
+      class InfobipServerError < GatewayError
         def initialize(message = "Gateway server error", _error_code = 0)
           super(message, :server_error)
         end
       end
 
-      class TeliaAuthenticationError < GatewayError
+      class InfobipAuthenticationError < GatewayError
         def initialize(message = "Unauthorized")
           super(message, :unauthorized)
         end
@@ -87,7 +87,7 @@ module Decidim
         attr_reader :debug
 
         def secrets
-          Rails.application.secrets.telia
+          Rails.application.secrets.infobip
         end
 
         def create_message!(delivery)
@@ -115,7 +115,7 @@ module Decidim
               "outboundSMSTextMessage" => { "message" => code },
               "receiptRequest" => {
                 "notifyURL" => Decidim::EngineRouter.new(
-                  "decidim_sms_telia",
+                  "decidim_sms_infobip",
                   { host: organization.host }
                 ).delivery_url(delivery.id),
                 "notificationFormat" => "JSON",
@@ -160,7 +160,7 @@ module Decidim
           log_policy_error(policy_error(message_text, message_variables), message_id, response.code)
 
           enque_message_delivery if message_id == "POL3003"
-          raise TeliaPolicyError.new("Telia Policy error", message_id)
+          raise InfobipPolicyError.new("Infobip Policy error", message_id)
         end
 
         def policy_error(text, variables = nil)
@@ -174,18 +174,18 @@ module Decidim
         end
 
         def log_policy_error(message, code, http_resp_code)
-          Rails.logger.error "Telia error -- Telia failed to deliver the code"
+          Rails.logger.error "Infobip error -- Infobip failed to deliver the code"
           log_base_error(message, code, http_resp_code)
         end
 
         def log_base_error(message, code, http_resp_code)
-          Rails.logger.error "Telia Error: #{code}"
+          Rails.logger.error "Infobip Error: #{code}"
           Rails.logger.error "Http response code: #{http_resp_code}"
           Rails.logger.error message
         end
 
         def log_server_error(message, code, http_resp_code)
-          Rails.logger.error "Telia server error -- Telia failed to deliver the code"
+          Rails.logger.error "Infobip server error -- Infobip failed to deliver the code"
           log_base_error(message, code, http_resp_code)
         end
 
@@ -203,7 +203,7 @@ module Decidim
         end
 
         def sms_retry_delay
-          ::Decidim::Sms::Telia.sms_retry_delay
+          ::Decidim::Sms::Infobip.sms_retry_delay
         end
       end
     end

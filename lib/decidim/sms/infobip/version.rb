@@ -2,8 +2,8 @@
 
 module Decidim
   module Sms
-    # This holds the decidim-sms-telia version.
-    module Telia
+    # This holds the decidim-sms-infobip version.
+    module Infobip
       def self.decidim_version
         "~> 0.29.0"
       end
