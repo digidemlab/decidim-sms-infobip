@@ -93,7 +93,7 @@ module Decidim
         def create_message!(delivery)
           response = ::Infobip::Sms::Connection.new.send_single_sms(
             phone_number_with_prefix: phone_number,
-            content: "Din inloggningskod till Medborgarinflytande Göteborg Stad är #{code}"
+            content: "Din inloggningskod till Medborgarinflytande Göteborgs Stad är #{code}"
           )
           [response, "sent"]
         end
